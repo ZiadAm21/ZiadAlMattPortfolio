@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Noria — Automatic Watering Robot</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d12;
+    --surface: #111520;
+    --surface2: #161c2a;
+    --border: #1e2a3a;
+    --accent: #00e5ff;
+    --accent2: #ff6b35;
+    --green: #00ff88;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: var(--sans); overflow-x: hidden; }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2.5rem;
+    background: rgba(10,13,18,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo { font-family: var(--mono); font-size: 0.8rem; color: var(--accent); letter-spacing: 0.1em; }
+  .back-btn {
+    font-family: var(--mono); font-size: 0.7rem; color: var(--muted);
+    text-decoration: none; letter-spacing: 0.08em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 0.5rem;
+    transition: color 0.2s;
+  }
+  .back-btn:hover { color: var(--accent); }
+  .back-btn::before { content: '←'; }
+
+  /* HERO */
+  .hero {
+    min-height: 60vh; display: flex; align-items: flex-end;
+    padding: 8rem 2.5rem 4rem;
+    position: relative; overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse at 70% 40%, rgba(0,255,136,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse at 20% 80%, rgba(0,229,255,0.05) 0%, transparent 50%);
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.025) 1px, transparent 1px);
+    background-size: 50px 50px;
+  }
+  .hero-content { position: relative; z-index: 1; max-width: 900px; }
+  .breadcrumb {
+    font-family: var(--mono); font-size: 0.65rem; color: var(--muted);
+    letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 1rem;
+  }
+  .breadcrumb span { color: var(--green); }
+  .project-type-badge {
+    display: inline-block;
+    font-family: var(--mono); font-size: 0.6rem;
+    color: var(--green); border: 1px solid rgba(0,255,136,0.3);
+    padding: 0.3rem 0.75rem; border-radius: 2px;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    background: rgba(0,255,136,0.05);
+  }
+  h1 {
+    font-size: clamp(2.5rem, 7vw, 5.5rem);
+    font-weight: 800; line-height: 0.95;
+    letter-spacing: -0.03em; margin-bottom: 0.5rem;
+  }
+  h1 span { color: var(--green); }
+  .hero-sub {
+    font-family: var(--mono); font-size: 0.85rem;
+    color: var(--muted); margin-top: 1rem;
+    line-height: 1.7; max-width: 550px;
+  }
+
+  /* META STRIP */
+  .meta-strip {
+    background: var(--surface); border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1.5rem 2.5rem;
+    display: flex; gap: 3rem; flex-wrap: wrap;
+  }
+  .meta-item { }
+  .meta-label {
+    font-family: var(--mono); font-size: 0.6rem;
+    color: var(--muted); letter-spacing: 0.15em;
+    text-transform: uppercase; margin-bottom: 0.3rem;
+  }
+  .meta-value { font-size: 0.9rem; font-weight: 600; color: var(--text); }
+
+  /* CONTENT */
+  .content { max-width: 900px; margin: 0 auto; padding: 5rem 2.5rem; }
+
+  .section { margin-bottom: 5rem; }
+  .section-label {
+    font-family: var(--mono); font-size: 0.65rem;
+    color: var(--green); letter-spacing: 0.25em;
+    text-transform: uppercase; margin-bottom: 0.75rem;
+  }
+  .section h2 {
+    font-size: 1.8rem; font-weight: 800;
+    letter-spacing: -0.02em; margin-bottom: 1.5rem;
+  }
+  .section p {
+    font-size: 0.95rem; color: #94a3b8;
+    line-height: 1.85; margin-bottom: 1rem;
+  }
+
+  /* IMAGE PLACEHOLDERS */
+  .img-placeholder {
+    width: 100%; border-radius: 4px;
+    border: 1px dashed var(--border);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 0.75rem;
+    background: var(--surface);
+    color: var(--muted);
+    font-family: var(--mono); font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    transition: border-color 0.2s;
+    cursor: pointer;
+  }
+  .img-placeholder:hover { border-color: var(--green); }
+  .img-placeholder .icon { font-size: 2rem; opacity: 0.4; }
+
+  .img-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 1.5rem; }
+  .img-grid .img-placeholder { height: 220px; }
+  .img-full .img-placeholder { height: 350px; margin-top: 1.5rem; }
+
+  /* SCHEMATIC PLACEHOLDER */
+  .schematic-box {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 4px; padding: 2rem; margin-top: 1.5rem;
+    position: relative; overflow: hidden;
+  }
+  .schematic-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,255,136,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.04) 1px, transparent 1px);
+    background-size: 30px 30px;
+  }
+  .schematic-inner {
+    position: relative; z-index: 1;
+    height: 300px; display: flex;
+    align-items: center; justify-content: center;
+    flex-direction: column; gap: 1rem;
+    color: var(--muted); font-family: var(--mono);
+    font-size: 0.7rem; letter-spacing: 0.1em;
+  }
+  .schematic-inner .icon { font-size: 2.5rem; opacity: 0.3; }
+
+  /* CHALLENGES */
+  .challenges-list { display: flex; flex-direction: column; gap: 1.25rem; margin-top: 1.5rem; }
+  .challenge-item {
+    background: var(--surface); border: 1px solid var(--border);
+    border-left: 3px solid var(--green);
+    border-radius: 0 4px 4px 0; padding: 1.25rem 1.5rem;
+  }
+  .challenge-item h4 {
+    font-size: 0.9rem; font-weight: 700;
+    margin-bottom: 0.4rem; color: var(--text);
+  }
+  .challenge-item p { font-size: 0.82rem; color: var(--muted); line-height: 1.7; margin: 0; }
+
+  /* SPECS TABLE */
+  .specs-table { width: 100%; border-collapse: collapse; margin-top: 1.5rem; }
+  .specs-table tr { border-bottom: 1px solid var(--border); }
+  .specs-table tr:last-child { border-bottom: none; }
+  .specs-table td {
+    padding: 0.85rem 1rem; font-size: 0.85rem;
+  }
+  .specs-table td:first-child {
+    font-family: var(--mono); font-size: 0.7rem;
+    color: var(--muted); letter-spacing: 0.08em;
+    text-transform: uppercase; width: 35%;
+    background: var(--surface);
+  }
+  .specs-table td:last-child { color: var(--text); background: var(--surface2); }
+
+  /* NAV FOOTER */
+  .page-nav {
+    border-top: 1px solid var(--border);
+    padding: 2rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    max-width: 100%;
+  }
+  .page-nav a {
+    font-family: var(--mono); font-size: 0.7rem;
+    color: var(--muted); text-decoration: none;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .page-nav a:hover { color: var(--accent); }
+  .next-project { text-align: right; }
+  .next-project span { display: block; color: var(--text); font-weight: 600; font-family: var(--sans); font-size: 1rem; margin-top: 0.25rem; }
+
+  /* FADE */
+  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.25rem; }
+    .hero { padding: 7rem 1.25rem 3rem; }
+    .meta-strip { padding: 1.25rem; gap: 1.5rem; }
+    .content { padding: 3rem 1.25rem; }
+    .img-grid { grid-template-columns: 1fr; }
+    .page-nav { padding: 1.5rem 1.25rem; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">// YOUR_NAME.ee</div>
+  <a href="index.html" class="back-btn">Back to Portfolio</a>
+</nav>
+
+<div class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="breadcrumb">Projects / <span>Embedded Systems</span></div>
+    <div class="project-type-badge">PCB Design · Embedded Systems</div>
+    <h1>Noria<br><span>Watering</span><br>Robot</h1>
+    <p class="hero-sub">An autonomous plant-watering system that monitors soil moisture and delivers precise amounts of water — keeping plants alive without any human intervention.</p>
+  </div>
+</div>
+
+<div class="meta-strip">
+  <div class="meta-item">
+    <div class="meta-label">Microcontroller</div>
+    <div class="meta-value">STM32 / ATmega328P</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">Year</div>
+    <div class="meta-value">2024</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">PCB Layers</div>
+    <div class="meta-value">2-Layer</div>
+  </div>
+  <div class="meta-item">
+    <div class="meta-label">Status</div>
+    <div class="meta-value" style="color: var(--green);">✓ Functional</div>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- OVERVIEW -->
+  <div class="section fade-in">
+    <div class="section-label">// 01 — Overview</div>
+    <h2>Project Goals</h2>
+    <p>Replace this with your actual project description. Explain the problem you set out to solve — maybe you wanted to automate watering for a balcony garden, or this was a design challenge to minimize power consumption for a battery-operated system.</p>
+    <p>Describe the key design requirements you set for yourself: sensing accuracy, pump control method, power budget, communication (if any), and what "done" looked like for this project.</p>
+
+    <div class="img-full">
+      <div class="img-placeholder" style="height:350px;">
+        <div class="icon">📷</div>
+        <div>[ Add a photo of your finished Noria robot here ]</div>
+        <div style="color:#334155; margin-top:0.25rem;">Replace this placeholder with an &lt;img&gt; tag pointing to your photo</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPECS -->
+  <div class="section fade-in">
+    <div class="section-label">// 02 — Specifications</div>
+    <h2>Key Components</h2>
+    <table class="specs-table">
+      <tr><td>Microcontroller</td><td>Replace with your MCU (e.g. STM32F103C8T6, ATmega328P)</td></tr>
+      <tr><td>Moisture Sensor</td><td>Replace with sensor used (e.g. capacitive soil sensor)</td></tr>
+      <tr><td>Pump Driver</td><td>Replace (e.g. MOSFET + 5V peristaltic pump)</td></tr>
+      <tr><td>Power Supply</td><td>Replace (e.g. 3.7V LiPo + LDO regulator)</td></tr>
+      <tr><td>Communication</td><td>Replace (e.g. UART debug, I2C sensor bus)</td></tr>
+      <tr><td>PCB Size</td><td>Replace (e.g. 60mm × 45mm)</td></tr>
+    </table>
+  </div>
+
+  <!-- SCHEMATICS -->
+  <div class="section fade-in">
+    <div class="section-label">// 03 — Schematic</div>
+    <h2>Circuit Design</h2>
+    <p>Describe the major functional blocks of your schematic — power regulation, sensor interface, microcontroller peripherals, pump drive circuitry. Explain any non-obvious design decisions.</p>
+
+    <div class="schematic-box">
+      <div class="schematic-grid"></div>
+      <div class="schematic-inner">
+        <div class="icon">⚡</div>
+        <div>[ Embed your schematic image or PDF export here ]</div>
+        <div style="color:#1e3a5f; margin-top:0.25rem; font-size:0.6rem;">Export from KiCad / Altium as PNG and replace this block with an &lt;img&gt; tag</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PCB LAYOUT -->
+  <div class="section fade-in">
+    <div class="section-label">// 04 — PCB Layout</div>
+    <h2>Board Design</h2>
+    <p>Talk through your layout decisions — component placement strategy, power planes, trace widths for current-carrying paths, any design-for-manufacture considerations, or lessons learned from fabrication.</p>
+
+    <div class="img-grid">
+      <div class="img-placeholder">
+        <div class="icon">🔲</div>
+        <div>[ PCB Top Layer ]</div>
+      </div>
+      <div class="img-placeholder">
+        <div class="icon">🔲</div>
+        <div>[ PCB Bottom Layer ]</div>
+      </div>
+      <div class="img-placeholder">
+        <div class="icon">📦</div>
+        <div>[ 3D Render ]</div>
+      </div>
+      <div class="img-placeholder">
+        <div class="icon">🔍</div>
+        <div>[ Assembled Board ]</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CHALLENGES -->
+  <div class="section fade-in">
+    <div class="section-label">// 05 — Challenges</div>
+    <h2>What I Learned</h2>
+    <p>This section is gold for recruiters — it shows you can reflect on your work and grow. Replace the items below with your real challenges.</p>
+
+    <div class="challenges-list">
+      <div class="challenge-item">
+        <h4>Challenge #1 — Replace with your actual challenge</h4>
+        <p>Describe what went wrong or what was harder than expected. Then explain how you diagnosed it and what you did to fix it. E.g. "Capacitive sensor readings drifted with temperature, so I added a calibration routine that runs on power-up."</p>
+      </div>
+      <div class="challenge-item">
+        <h4>Challenge #2 — Replace with your actual challenge</h4>
+        <p>Another real obstacle you hit during design, fabrication, or testing. What did this teach you about the design process?</p>
+      </div>
+      <div class="challenge-item">
+        <h4>Challenge #3 — Replace with your actual challenge</h4>
+        <p>Could be a firmware bug, a layout mistake that required a respin, a component that was discontinued — anything that forced you to problem-solve.</p>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- PAGE NAV -->
+<div class="page-nav">
+  <a href="index.html">← Back to all projects</a>
+  <div class="next-project">
+    <a href="chessboard.html">Next Project →<span>Automatic Chessboard</span></a>
+  </div>
+</div>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

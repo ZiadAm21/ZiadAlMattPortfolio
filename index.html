@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EE Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0d12;
+    --surface: #111520;
+    --surface2: #161c2a;
+    --border: #1e2a3a;
+    --accent: #00e5ff;
+    --accent2: #ff6b35;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --mono: 'Space Mono', monospace;
+    --sans: 'Syne', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; width: 100%; z-index: 100;
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 1rem 2.5rem;
+    background: rgba(10,13,18,0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+  }
+  .nav-links { display: flex; gap: 2rem; }
+  .nav-links a {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex; align-items: center;
+    padding: 6rem 2.5rem 4rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-grid {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.03) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridDrift 20s linear infinite;
+  }
+  @keyframes gridDrift { from { transform: translateY(0); } to { transform: translateY(60px); } }
+
+  .hero-glow {
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(0,229,255,0.08) 0%, transparent 70%);
+    top: -100px; right: -100px;
+    pointer-events: none;
+  }
+  .hero-glow2 {
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,107,53,0.06) 0%, transparent 70%);
+    bottom: 0; left: 10%;
+    pointer-events: none;
+  }
+
+  .hero-content { position: relative; z-index: 1; max-width: 800px; }
+  .hero-tag {
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+    display: flex; align-items: center; gap: 0.75rem;
+  }
+  .hero-tag::before {
+    content: '';
+    display: block; width: 32px; height: 1px;
+    background: var(--accent);
+  }
+
+  h1 {
+    font-size: clamp(3rem, 8vw, 6rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.5rem;
+  }
+  h1 span { color: var(--accent); }
+
+  .hero-sub {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--muted);
+    line-height: 1.8;
+    max-width: 500px;
+    margin-bottom: 2.5rem;
+  }
+
+  .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 0.85rem 1.75rem;
+    border-radius: 2px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: inline-block;
+  }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    font-weight: 700;
+    border: 1px solid var(--accent);
+  }
+  .btn-primary:hover { background: transparent; color: var(--accent); }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* SECTIONS */
+  section { padding: 6rem 2.5rem; max-width: 1100px; margin: 0 auto; }
+
+  .section-label {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    margin-bottom: 0.75rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 3rem;
+    color: var(--text);
+  }
+
+  /* SKILLS */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.5rem;
+  }
+  .skill-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1.5rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .skill-card:hover { border-color: var(--accent); transform: translateY(-2px); }
+  .skill-icon { font-size: 1.5rem; margin-bottom: 0.75rem; }
+  .skill-category {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--accent2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .skill-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.75rem; }
+  .tag {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--muted);
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+  }
+
+  /* PROJECTS */
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    overflow: hidden;
+    transition: border-color 0.2s, transform 0.2s;
+    cursor: pointer;
+  }
+  .project-card:hover { border-color: var(--accent); transform: translateY(-3px); }
+
+  .project-img {
+    width: 100%; height: 200px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .pcb-bg { background: linear-gradient(135deg, #0d2136 0%, #0a1a2e 100%); }
+  .emb-bg { background: linear-gradient(135deg, #1a1a0d 0%, #2a1a06 100%); }
+  .pcb-trace {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(0,229,255,0.1) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.1) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  .project-body { padding: 1.5rem; }
+  .project-type {
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    color: var(--accent2);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+  .project-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+  .project-card p { font-size: 0.85rem; color: var(--muted); line-height: 1.6; margin-bottom: 1rem; }
+  .project-links { display: flex; gap: 0.75rem; }
+  .project-link {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--accent);
+    text-decoration: none;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-bottom: 1px solid rgba(0,229,255,0.3);
+    padding-bottom: 1px;
+    transition: border-color 0.2s;
+  }
+  .project-link:hover { border-color: var(--accent); }
+
+  /* EXPERIENCE */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: '';
+    position: absolute; left: 0; top: 0; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .timeline-item { position: relative; padding-bottom: 3rem; }
+  .timeline-dot {
+    position: absolute; left: -2rem;
+    width: 10px; height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    margin-top: 0.35rem;
+    transform: translateX(-4.5px);
+    box-shadow: 0 0 12px var(--accent);
+  }
+  .timeline-date {
+    font-family: var(--mono);
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+  .timeline-item h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.25rem; }
+  .timeline-company {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--accent2);
+    margin-bottom: 0.75rem;
+  }
+  .timeline-item p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+
+  /* CONTACT */
+  .contact-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 3rem;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 2rem; flex-wrap: wrap;
+  }
+  .contact-box h2 { font-size: 2rem; font-weight: 800; }
+  .contact-box p { color: var(--muted); font-size: 0.9rem; margin-top: 0.5rem; }
+  .contact-links { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2rem 2.5rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-family: var(--mono); font-size: 0.65rem; color: var(--muted);
+  }
+
+  /* SCROLL ANIMATIONS */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.25rem; }
+    .nav-links { gap: 1rem; }
+    section { padding: 4rem 1.25rem; }
+    .contact-box { flex-direction: column; padding: 2rem 1.5rem; }
+    footer { flex-direction: column; gap: 0.5rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-logo">// ZiadAl-Matt.ee</div>
+  <div class="nav-links">
+    <a href="#skills">Skills</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-glow2"></div>
+  <div class="hero-content">
+    <div class="hero-tag">Electrical Engineering Graduate</div>
+    <h1>Ziad<br><span>Al-Matt.</span></h1>
+    <p class="hero-sub">
+      BSc Electrical Engineering · PCB Design · Embedded Systems<br>
+      Building hardware that bridges the physical and digital worlds.
+    </p>
+    <div class="hero-ctas">
+      <a href="#projects" class="btn btn-primary">View Projects</a>
+      <a href="#contact" class="btn btn-outline">Get in Touch</a>
+    </div>
+  </div>
+</div>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">// 001</div>
+  <div class="section-title fade-in">Technical Skills</div>
+  <div class="skills-grid fade-in">
+    <div class="skill-card">
+      <div class="skill-icon">🔲</div>
+      <div class="skill-category">Hardware</div>
+      <h3>PCB Design</h3>
+      <div class="skill-tags">
+        <span class="tag">KiCad</span>
+        <span class="tag">Altium</span>
+        <span class="tag">EMI</span>
+        <span class="tag">Signal Integrity</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">⚡</div>
+      <div class="skill-category">Embedded Programming</div>
+      <h3>Firmware Dev</h3>
+      <div class="skill-tags">
+        <span class="tag">ESP-IDF</span>
+        <span class="tag">STM32</span>
+        <span class="tag">FreeRTOS</span>
+        <span class="tag">C/C++</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">📡</div>
+      <div class="skill-category">Communication</div>
+      <h3>Languages</h3>
+      <div class="skill-tags">
+        <span class="tag">English - Fluent</span>
+        <span class="tag">Arabic - Native</span>
+        <span class="tag">Hungarian - Intermediate</span>
+      </div>
+    </div>
+    <div class="skill-card">
+      <div class="skill-icon">🔬</div>
+      <div class="skill-category">Other Skills</div>
+      <h3></h3>
+      <div class="skill-tags">
+        <span class="tag">Python</span>
+        <span class="tag">Deep Learning(PyTorch/Tensorflow)</span>
+        <span class="tag">Autocad</span>
+        <span class="tag">Microsoft Office</span>
+        <span class="tag">Team Work and Problem Solving</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">// 002</div>
+  <div class="section-title fade-in">Featured Projects</div>
+  <div class="projects-grid fade-in">
+    <div class="project-card">
+      <div class="project-img pcb-bg">
+        <div class="pcb-trace"></div>
+        <span style="position:relative;z-index:1;">⚡</span>
+      </div>
+      <div class="project-body">
+        <div class="project-type">Personal Project</div>
+        <h3>Noria; Automatic Watering Robot</h3>
+        <p>A fully autonomous watering system for indoor plants, featuring a microcontroller-based control unit and sensor integration 
+          to control the water pump, wheels and arms of the robot. I designed the PCB layout and implemented the firmware for the control system, 
+          as well as training the computer vision model for plant recognition.</p>
+        <div class="project-links">
+          <a href="https://github.com/ZiadAm21/Mechanical-Turk" class="project-link">GitHub →</a>
+          <a href="#" class="project-link">Project Details →</a>
+        </div>
+      </div>
+    </div>
+    <div class="project-card">
+      <div class="project-img emb-bg">
+        <div class="pcb-trace"></div>
+        <span style="position:relative;z-index:1;">🔲</span>
+      </div>
+      <div class="project-body">
+        <div class="project-type">Thesis Project</div>
+        <h3>Automatic Chessboard</h3>
+        <p>An actuated chessboard that can automatically set up games and track moves using computer vision and embedded systems,
+          to merge physical and digital worlds seamlessly. I developed the circuit board prohgrammed the ESP32's 
+          firmware to control two stepper motors and an electromagnet, and connect with a host computer over Wi-Fi. </p>
+        <div class="project-links">
+          <a href="#" class="project-link">GitHub →</a>
+          <a href="#" class="project-link">Project Details →</a> 
+        </div>
+      </div>
+    </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">// 003</div>
+  <div class="section-title fade-in">Experience & Training</div>
+  <div class="timeline fade-in">
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">2020 — 2025</div>
+      <h3>B.Sc. Electrical Engineering</h3>
+      <div class="timeline-company">University of Pécs</div>
+      <p> GPA: 4.25 / 5.0. Relevant coursework: Analog & Digital Electronics, Embedded Systems, PCB Design, Signal Processing, Control Systems.</p>
+    </div>
+        <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">2024</div>
+      <h3>PCB Design Certification</h3>
+      <div class="timeline-company">Altium</div>
+      <p>This certification validates my skills in designing and developing printed circuit boards using Altium Designer, 
+        and describes the process of designing schematics and PCB layouts with good practices.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">January - February 2025</div>
+      <h3>Electrical Engineer Trainee</h3>
+      <div class="timeline-company">Dosor Najd</div>
+      <p>Assisted in the installation and configuration of 16 Huawei switches in 2 sites and debugged fire systems.
+      Gained valuable insights on engineer-client communication, collaboration with supervisors, and project management.</p>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot"></div>
+      <div class="timeline-date">August 2025 - February 2026</div>
+      <h3>Network Engineer</h3>
+      <div class="timeline-company">SCAP</div>
+      <p>Desgined and reviewed AutoCAD schematics that detail CCTV, fire alarm, public address and data layouts
+        throughout a building. Researched and recommended parts for clients based on their unique projects' needs.
+        Proposed pricing to management to ensure the project is both profitable and accepted by the client.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <div class="section-label">// 004</div>
+  <div class="contact-box fade-in">
+    <div>
+      <h2>Let's Build<br>Something.</h2>
+      <p>Open to full-time roles and internship opportunities in hardware and embedded systems.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:Ziadam59@gmail.com" class="btn btn-primary">Email Me</a>
+      <a href="https://www.linkedin.com/in/ziad-al-matt-aa40791bb/" class="btn btn-outline">LinkedIn</a>
+      <a href="https://github.com/ZiadAm21" class="btn btn-outline">GitHub</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div>// YOUR_NAME — Electrical Engineer</div>
+  <div>Built with HTML · Hosted on GitHub Pages</div>
+</footer>
+
+<script>
+  // Scroll fade-in
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  // Smooth scroll
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      document.querySelector(a.getAttribute('href'))?.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
