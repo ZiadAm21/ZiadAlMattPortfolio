@@ -226,7 +226,7 @@
 <body>
 
 <nav>
-  <div class="nav-logo">// YOUR_NAME.ee</div>
+  <div class="nav-logo">// Ziad Al-Matt.ee</div>
   <a href="index.html" class="back-btn">Back to Portfolio</a>
 </nav>
 
@@ -244,19 +244,24 @@
 <div class="meta-strip">
   <div class="meta-item">
     <div class="meta-label">Microcontroller</div>
-    <div class="meta-value">STM32 / ATmega328P</div>
+    <div class="meta-value">ESP32+Pi Zero 2W</div>
   </div>
   <div class="meta-item">
-    <div class="meta-label">Year</div>
-    <div class="meta-value">2024</div>
+    <div class="meta-label">Timeline</div>
+    <div class="meta-value">Sept 2025 - Mar 2026</div>
   </div>
-  <div class="meta-item">
-    <div class="meta-label">PCB Layers</div>
-    <div class="meta-value">2-Layer</div>
+    <div class="meta-item">
+    <div class="meta-label">PCB</div>
+    <div class="meta-value">Custom Made 4-Layer PCB</div>
   </div>
+    <div class="meta-item">
+    <div class="meta-label">Power Supply</div>
+    <div class="meta-value">2s2p rechargable li-ion pack</div>
+  </div>
+
   <div class="meta-item">
     <div class="meta-label">Status</div>
-    <div class="meta-value" style="color: var(--green);">✓ Functional</div>
+    <div class="meta-value" style="color: var(--green);">In progress</div>
   </div>
 </div>
 
@@ -266,15 +271,18 @@
   <div class="section fade-in">
     <div class="section-label">// 01 — Overview</div>
     <h2>Project Goals</h2>
-    <p>Replace this with your actual project description. Explain the problem you set out to solve — maybe you wanted to automate watering for a balcony garden, or this was a design challenge to minimize power consumption for a battery-operated system.</p>
-    <p>Describe the key design requirements you set for yourself: sensing accuracy, pump control method, power budget, communication (if any), and what "done" looked like for this project.</p>
+    <p>Plants can give a home a natural soothing aesthetic, provide organic and fresh crops, and are good for the environment. 
+      However, many people don't have the time to care for every plant or lack the knowledge on how often or how much to water
+      every plant. The risk of killing a plant can put many people off home gardening, so I set out to create a bot that takes the risk
+    out of the equation.</p>
+    <p>This robot should autonomously go around a user's house, map every potted plant it can reach, measure the soil to dispense exactly 
+      as much water as each plant needs by using a preprogrammed database of different plants' watering needs.</p>
 
-    <div class="img-full">
-      <div class="img-placeholder" style="height:350px;">
-        <div class="icon">📷</div>
-        <div>[ Add a photo of your finished Noria robot here ]</div>
-        <div style="color:#334155; margin-top:0.25rem;">Replace this placeholder with an &lt;img&gt; tag pointing to your photo</div>
-      </div>
+    <div class="schematic-box">
+      <div class="schematic-grid"></div>
+      <div class="schematic-inner">
+      <div><img src="./images/RobotBody.jpeg" alt="Noria Watering Robot"></div>
+    </div>
     </div>
   </div>
 
@@ -283,12 +291,13 @@
     <div class="section-label">// 02 — Specifications</div>
     <h2>Key Components</h2>
     <table class="specs-table">
-      <tr><td>Microcontroller</td><td>Replace with your MCU (e.g. STM32F103C8T6, ATmega328P)</td></tr>
-      <tr><td>Moisture Sensor</td><td>Replace with sensor used (e.g. capacitive soil sensor)</td></tr>
-      <tr><td>Pump Driver</td><td>Replace (e.g. MOSFET + 5V peristaltic pump)</td></tr>
-      <tr><td>Power Supply</td><td>Replace (e.g. 3.7V LiPo + LDO regulator)</td></tr>
-      <tr><td>Communication</td><td>Replace (e.g. UART debug, I2C sensor bus)</td></tr>
-      <tr><td>PCB Size</td><td>Replace (e.g. 60mm × 45mm)</td></tr>
+      <tr><td>Microcontroller</td><td>ESP32 + Raspberry Pi Zero 2w</td></tr>
+      <tr><td>Sensors</td><td>Capacitive soil sensor, ToF sensor for obstacles, OV5647 camera, Float sensor</td></tr>
+      <tr><td>Actuation</td><td>Peristaltic pump, Geared motor wheels, Servos for joints</td></tr>
+      <tr><td>Power Supply</td><td>2s2p li-ion pack, 5V buck converter, 3.6V buck converter, 3.3V LDO</td></tr>
+      <tr><td>Interface</td><td>A server hosted on the Pi Zero 2W will communicate with an App on the user's phone + an LCD 
+      for displaying basic information</td></tr>
+      <tr><td>Communication</td><td>Wi-Fi for Pi to app communication and UART for PI to ESP32 communication</td></tr>
     </table>
   </div>
 
@@ -296,62 +305,44 @@
   <div class="section fade-in">
     <div class="section-label">// 03 — Schematic</div>
     <h2>Circuit Design</h2>
-    <p>Describe the major functional blocks of your schematic — power regulation, sensor interface, microcontroller peripherals, pump drive circuitry. Explain any non-obvious design decisions.</p>
+    <p></p>
+    <p>This board takes in power from an external battery pack through a screw terminal, the ESP32 and Pi control 
+      various peripherals through JST connectors for easy assembly.</p>
 
     <div class="schematic-box">
       <div class="schematic-grid"></div>
       <div class="schematic-inner">
-        <div class="icon">⚡</div>
-        <div>[ Embed your schematic image or PDF export here ]</div>
-        <div style="color:#1e3a5f; margin-top:0.25rem; font-size:0.6rem;">Export from KiCad / Altium as PNG and replace this block with an &lt;img&gt; tag</div>
+        <div><img src="./images/Noria3DPCB.PNG" alt="Noria PCB Top Layer"></div>
       </div>
     </div>
-  </div>
-
-  <!-- PCB LAYOUT -->
-  <div class="section fade-in">
-    <div class="section-label">// 04 — PCB Layout</div>
-    <h2>Board Design</h2>
-    <p>Talk through your layout decisions — component placement strategy, power planes, trace widths for current-carrying paths, any design-for-manufacture considerations, or lessons learned from fabrication.</p>
-
-    <div class="img-grid">
-      <div class="img-placeholder">
-        <div class="icon">🔲</div>
-        <div>[ PCB Top Layer ]</div>
-      </div>
-      <div class="img-placeholder">
-        <div class="icon">🔲</div>
-        <div>[ PCB Bottom Layer ]</div>
-      </div>
-      <div class="img-placeholder">
-        <div class="icon">📦</div>
-        <div>[ 3D Render ]</div>
-      </div>
-      <div class="img-placeholder">
-        <div class="icon">🔍</div>
-        <div>[ Assembled Board ]</div>
-      </div>
-    </div>
-  </div>
+  </div> 
 
   <!-- CHALLENGES -->
   <div class="section fade-in">
-    <div class="section-label">// 05 — Challenges</div>
+    <div class="section-label">// 04 — Challenges</div>
     <h2>What I Learned</h2>
-    <p>This section is gold for recruiters — it shows you can reflect on your work and grow. Replace the items below with your real challenges.</p>
+    <p>This project has been a great jump in complexity from my previous work, it has allowed me to push my understanding of 
+      embedded systems and robotics but also exposed me to some gaps in my knowledge. Here are some of the challenges I encountered:</p>
 
     <div class="challenges-list">
       <div class="challenge-item">
-        <h4>Challenge #1 — Replace with your actual challenge</h4>
-        <p>Describe what went wrong or what was harder than expected. Then explain how you diagnosed it and what you did to fix it. E.g. "Capacitive sensor readings drifted with temperature, so I added a calibration routine that runs on power-up."</p>
+        <h4>Challenge #1 — Tailoring my product to potential market needs</h4>
+        <p>As a fresh engineering graduate, I struggled to apply what I learnt to the real world. It took a lot of research to understand the kind of customers 
+          my product would appeal to and what their needs would be to center costs, feautres, and aesthetics around those needs. I experimented with different approaches such as an automatic mini 
+          greenhouse before settling on a roomba inspired design to accomadate outdoor and decorative indoor plants.</p>
       </div>
       <div class="challenge-item">
-        <h4>Challenge #2 — Replace with your actual challenge</h4>
-        <p>Another real obstacle you hit during design, fabrication, or testing. What did this teach you about the design process?</p>
+        <h4>Challenge #2 — Sensor calibration</h4>
+        <p>The soil moisture sensor, having analog output, needed careful calibration. It wasn't enough to use hardcoded figures as 
+          the figures will have to be recalculated if the sensor was repleaced or as it got older. To write firmware that could routinely 
+          re-calibrate the moisture sensor, I had to research and implement good signal processing practices. 
+        </p>
       </div>
       <div class="challenge-item">
-        <h4>Challenge #3 — Replace with your actual challenge</h4>
-        <p>Could be a firmware bug, a layout mistake that required a respin, a component that was discontinued — anything that forced you to problem-solve.</p>
+        <h4>Challenge #3 — System wide syncronization</h4>
+        <p>This product had an ESP32 as the main controller, but also used a I2C based chip for charging, a Pi Zero 2W for image processing and 
+          server hosting, and an app for user interface. Ensuring all these parts worked coherently together proved difficult, for example
+        the ESP32 shouldn't move before the PI was online and running as the PI along could process images to guide the robot's movements.</p>
       </div>
     </div>
   </div>

@@ -137,6 +137,36 @@
   .img-grid .img-placeholder { height: 220px; }
   .img-full .img-placeholder { height: 380px; margin-top: 1.5rem; }
 
+  .img-grid > div {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.img-grid img {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+
+.img-caption {
+  font-family: var(--mono);
+  font-size: 0.65rem;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
   /* SCHEMATIC */
   .schematic-box {
     background: var(--surface); border: 1px solid var(--border);
@@ -213,7 +243,7 @@
 <body>
 
 <nav>
-  <div class="nav-logo">// YOUR_NAME.ee</div>
+  <div class="nav-logo">// Ziad Al-Matt.ee</div>
   <a href="index.html" class="back-btn">Back to Portfolio</a>
 </nav>
 
@@ -224,30 +254,31 @@
     <div class="breadcrumb">Projects / <span>Robotics & Automation</span></div>
     <div class="project-type-badge">PCB Design · Robotics · Embedded Systems</div>
     <h1>Automatic<br><span>Chess</span><br>Board</h1>
-    <p class="hero-sub">A motorised chessboard that physically moves pieces on its own — letting you play against a chess engine without touching a single piece.</p>
+    <p class="hero-sub">A motorised chessboard that physically moves pieces on its own and recognises your moves with a 
+      camera-based vision system - letting you play on a physical board against a chess engine or players from anywhere.</p>
   </div>
 </div>
 
 <div class="meta-strip">
   <div class="meta-item">
     <div class="meta-label">Microcontroller</div>
-    <div class="meta-value">STM32 / ESP32</div>
+    <div class="meta-value">ESP32</div>
   </div>
   <div class="meta-item">
     <div class="meta-label">Actuation</div>
-    <div class="meta-value">Stepper Motors</div>
+    <div class="meta-value">CoreXY Mechanism</div>
   </div>
   <div class="meta-item">
-    <div class="meta-label">PCB Layers</div>
-    <div class="meta-value">2-Layer</div>
+    <div class="meta-label">PCB</div>
+    <div class="meta-value">Custom-designed 4-layer PCB</div>
   </div>
   <div class="meta-item">
     <div class="meta-label">Year</div>
-    <div class="meta-value">2024</div>
+    <div class="meta-value">2025</div>
   </div>
   <div class="meta-item">
     <div class="meta-label">Status</div>
-    <div class="meta-value" style="color: var(--gold);">✓ Functional</div>
+    <div class="meta-value" style="color: var(--gold);">✓ Complete</div>
   </div>
 </div>
 
@@ -257,15 +288,26 @@
   <div class="section fade-in">
     <div class="section-label">// 01 — Overview</div>
     <h2>Project Goals</h2>
-    <p>Replace this with your actual project description. Explain the concept — how the board physically moves pieces (e.g. electromagnet under the board + XY gantry, or per-square servo actuators), and what inspired the project.</p>
-    <p>Describe the overall system architecture: the chess engine integration, position sensing, piece detection method, and how moves are communicated from software to hardware.</p>
+    <p>The board registers user moves via a camera connected to the ESP32, the ESP sends the image to a websocket server on a 
+      host computer that runs it through a neural network to identify the current board state and update the game on a chess platform.</p>
+    <p>The server sends commands to move pieces on the physical board to match opponent moves in real-time. This is achieved
+      through the CoreXY mechanism shown below driven by stepper motors, to move an electromagnet that can pick up and place chess pieces
+       on the board. The complete coreXY 3D model is included in the github repository of this project.</p>
 
-    <div class="img-full">
-      <div class="img-placeholder" style="height:380px;">
-        <div class="icon">♟️</div>
-        <div>[ Add a photo of your Automatic Chessboard here ]</div>
-        <div style="color:#334155; margin-top:0.25rem;">Replace this placeholder with an &lt;img&gt; tag pointing to your photo</div>
+    <div class="schematic-box" style="height: 450px;">
+      <div class="schematic-grid"></div>
+      <div class="schematic-inner">
+      <div class="img-grid">
+        <div>
+          <img src="./images/ChessCoreXY.png" alt="CoreXY mechanism that manipulates an electromagnet under the chessboard.">
+          <div class="img-caption">CoreXY Mechanism</div>
+        </div>
+        <div>
+          <img src="./images/EmagMount.png" alt="Electromagnet mounting solution for the CoreXY mechanism.">
+          <div class="img-caption">Sliding Mount for Electromagnet</div>
+        </div>
       </div>
+    </div>
     </div>
   </div>
 
@@ -274,76 +316,75 @@
     <div class="section-label">// 02 — Specifications</div>
     <h2>Key Components</h2>
     <table class="specs-table">
-      <tr><td>Microcontroller</td><td>Replace with your MCU (e.g. ESP32, STM32F4)</td></tr>
-      <tr><td>Motion System</td><td>Replace (e.g. CoreXY gantry, NEMA 17 steppers, A4988 drivers)</td></tr>
-      <tr><td>Piece Detection</td><td>Replace (e.g. Reed switches per square, hall effect sensors)</td></tr>
-      <tr><td>Chess Engine</td><td>Replace (e.g. Stockfish via serial, local on MCU)</td></tr>
-      <tr><td>Communication</td><td>Replace (e.g. Wi-Fi / BLE via ESP32, USB)</td></tr>
-      <tr><td>Power Supply</td><td>Replace (e.g. 12V 3A for steppers + 3.3V LDO for logic)</td></tr>
-      <tr><td>PCB Size</td><td>Replace (e.g. controller board 80mm × 60mm)</td></tr>
+      <tr><td>Microcontroller</td><td>ESP32</td></tr>
+      <tr><td>Motion System</td><td>CoreXY Mechanism</td></tr>
+      <tr><td>Piece Detection</td><td>YOLOv8</td></tr>
+      <tr><td>Chess Platform</td><td>Chess.com</td></tr>
+      <tr><td>Communication</td><td>Wi-Fi to websocket server</td></tr>
+      <tr><td>Power Supply</td><td>12V 3A for steppers + 5V buck converter and 3.3V LDO</td></tr>
     </table>
   </div>
 
   <!-- SCHEMATICS -->
-  <div class="section fade-in">
-    <div class="section-label">// 03 — Schematic</div>
-    <h2>Circuit Design</h2>
-    <p>Walk through the major blocks of your schematic — motor driver stage, MCU connections, power distribution, any protection circuitry. Explain why you made specific component choices.</p>
-
-    <div class="schematic-box">
-      <div class="schematic-chess"></div>
-      <div class="schematic-inner">
-        <div class="icon">⚡</div>
-        <div>[ Embed your schematic image or PDF export here ]</div>
-        <div style="color:#1e3a5f; margin-top:0.25rem; font-size:0.6rem;">Export from KiCad / Altium as PNG and replace this block with an &lt;img&gt; tag</div>
-      </div>
+<div class="section fade-in">
+  <div class="section-label">// 03 — Schematic</div>
+  <h2>Circuit Design</h2>
+  <p>The three sections below are logic level control from the ESP32, electromagnet control, and power supply
+    from a barrel jack and a buck converter.</p>
+  <div class="img-grid">
+    <div>
+      <img src="./images/SchematicMain.png" alt="Main Schematic">
+      <div class="img-caption">Main Schematic</div>
+    </div>
+    <div>
+      <img src="./images/SchematicPS.png" alt="Power Supply Schematic">
+      <div class="img-caption">Power Supply Schematic</div>
     </div>
   </div>
+</div>
 
-  <!-- PCB LAYOUT -->
-  <div class="section fade-in">
-    <div class="section-label">// 04 — PCB Layout</div>
-    <h2>Board Design</h2>
-    <p>Describe your layout approach — how you handled high-current stepper motor traces, any thermal considerations for the motor drivers, connector placement for the XY gantry wiring, and any iterations you went through.</p>
-
-    <div class="img-grid">
-      <div class="img-placeholder">
-        <div class="icon">🔲</div>
-        <div>[ PCB Top Layer ]</div>
-      </div>
-      <div class="img-placeholder">
-        <div class="icon">🔲</div>
-        <div>[ PCB Bottom Layer ]</div>
-      </div>
-      <div class="img-placeholder">
-        <div class="icon">📦</div>
-        <div>[ 3D Render ]</div>
-      </div>
-      <div class="img-placeholder">
-        <div class="icon">🔍</div>
-        <div>[ Assembled Board ]</div>
-      </div>
+<!-- PCB LAYOUT -->
+<div class="section fade-in">
+  <div class="section-label">// 04 — PCB Layout</div>
+  <h2>Board Design</h2>
+  <p>4-layers where used to ensure clean ground and power planes and easy routing as well as good thermal dissipation.</p>
+  <div class="img-grid">
+    <div>
+      <img src="./images/ChessPCB.png" alt="PCB Layout">
+      <div class="img-caption">PCB Layout</div>
+    </div>
+    <div>
+      <img src="./images/ChessPCB3D.png" alt="3D Render">
+      <div class="img-caption">3D Render</div>
     </div>
   </div>
+</div>
 
   <!-- CHALLENGES -->
   <div class="section fade-in">
     <div class="section-label">// 05 — Challenges</div>
     <h2>What I Learned</h2>
-    <p>Replace the items below with your real obstacles. Recruiters love this section — it shows self-awareness and engineering maturity.</p>
+    <p>This project has been the first real world application of my engineering skills. I've learned a lot about integrating 
+      hardware and software, debugging complex systems, and the importance of careful design and testing.</p>
 
     <div class="challenges-list">
       <div class="challenge-item">
-        <h4>Challenge #1 — Replace with your actual challenge</h4>
-        <p>E.g. "Stepper motor noise was coupling into sensor readings, causing false piece detection. Fixed by adding decoupling capacitors and re-routing power and signal traces on a second board revision."</p>
+        <h4>Challenge #1 — Electromagnet Overheating</h4>
+        <p>E.g. "The electromagnet would overheat after approximately 10 minutes of on and off toggling, making it impractical for the 
+          duration of a typical game. Afte doing some research, I discovered this model was not designed for continuous operation, and so
+          I replaced it with a more appropriate alternative. This highlighted the importance of careful component selection and thermal management."</p>
       </div>
       <div class="challenge-item">
-        <h4>Challenge #2 — Replace with your actual challenge</h4>
-        <p>E.g. "Integrating the chess engine — how did you connect the algorithmic side to the physical hardware? What protocol did you use and what edge cases did you have to handle?"</p>
+        <h4>Challenge #2 — Complicated Maneuvers</h4>
+        <p>Certain moves in chess, such as knight jumps, casteling, and capturing, require quick and precise movements. I had to implement 
+          specific algorithms to break down these maneuvers into simpler steps that the CoreXY mechanism could execute reliably.
+        </p>
       </div>
       <div class="challenge-item">
-        <h4>Challenge #3 — Replace with your actual challenge</h4>
-        <p>E.g. "Mechanical precision — how did you ensure the piece always landed cleanly on the correct square? Did you implement homing, position feedback, or open-loop stepping?"</p>
+        <h4>Challenge #3 — QA Testing</h4>
+        <p>As this was my thesis project, I needed to test every component thoroughly so I can accurately report on its performance and 
+          highlight any limitations or areas for improvement. For example, testing the percision of my motors, the accuracy of the piece 
+          detection system, and the previously mentioned electromagnet overheating.</p>
       </div>
     </div>
   </div>
